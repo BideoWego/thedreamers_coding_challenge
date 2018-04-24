@@ -1,148 +1,52 @@
+const fs = require('fs');
 
-function shuffle(array) {
-  let shuffledIndex = 0;
+const data = [];
 
-  for (let i = 0; i < array.length; i++) {
-    const rand = Math.floor(Math.random() * array.length) - shuffledIndex;
-    [
-      array[shuffledIndex],
-      array[shuffledIndex + rand]
-    ] = [
-      array[shuffledIndex + rand],
-      array[shuffledIndex]
-    ]
-    shuffledIndex++;
+
+class Node {
+  constructor(value=null, parent=null, children=[]) {
+    this.value = value;
+    this.parent = parent;
+    this.children = children;
+    this.depth = parent ? parent.depth + 1 : 0;
+  }
+}
+
+
+class PermutationTree {
+  constructor(values) {
+    this.values = values;
+    this.root = new Node();
+    this.numPerms = 0;
+    this.permutations = [];
   }
 
-  return array;
-}
+  build() {
+    this.createPermutations(this.values);
+  }
 
+  addPermutation(nums) {
+    this.permutations.push(nums);
+    console.log(this.permutations, this.permutations.length);
+  }
 
-function createOperationPath(...args) {
+  createPermutations(rest=[], current=[]) {
+    if (current.length === this.values.length) {
+      return this.addPermutation(current);
+    }
 
-}
-
-
-function findOperationPaths(n=[1, 3, 4, 6], answer=24) {
-  // For each number
-  // start a tree where each other number
-  // has one of + - / *
-  // on each of the other numbers
-  // when no more numbers are available
-  // return result
-
-  // Compute the number of permutations
-  // Continue until memo has keys of that length
-  // For each perm check if memo has that key
-  // If not perform operations
-
-  const numPerms = 4 * 3 * 2;
-  const memo = {};
-
-  for (let i = 0; i < numPerms; i++) {
-    const shuffled = shuffle(n);
-    const key = shuffled.join('');
-    if (!memo[key]) {
-      // perform operations
-      // {
-      //   "13476": {
-      //     "1+3+4+6": 14,
-      //     //...
-      //   }
-      // }
-
-      const [a, b, c, d] = shuffled;
-      memo[key] = {
-
-        // Addition
-        [`${ a }+${ b }+${ c }+${ d }`]: a + b + c + d,
-
-        [`${ a }+${ b }+${ c }-${ d }`]: a + b + c - d,
-        [`${ a }+${ b }-${ c }-${ d }`]: a + b - c - d,
-
-        [`${ a }+${ b }+${ c }/${ d }`]: a + b + c / d,
-        [`(${ a }+${ b }+${ c })/${ d }`]: (a + b + c) / d,
-
-        [`${ a }+${ b }/${ c }/${ d }`]: a + b / c / d,
-        [`(${ a }+${ b })/${ c }/${ d }`]: (a + b) / c / d,
-
-        [`${ a }+${ b }+${ c }*${ d }`]: a + b + c * d,
-        [`(${ a }+${ b }+${ c })*${ d }`]: (a + b + c) * d,
-
-        [`${ a }+${ b }*${ c }*${ d }`]: a + b * c * d,
-        [`(${ a }+${ b })*${ c }*${ d }`]: (a + b) * c * d,
-
-
-        // Subtraction
-        [`${ a }-${ b }-${ c }-${ d }`]: a - b - c - d,
-
-        [`${ a }-${ b }-${ c }+${ d }`]: a - b - c + d,
-        [`${ a }-${ b }+${ c }+${ d }`]: a - b + c + d,
-
-        [`${ a }-${ b }-${ c }/${ d }`]: a - b - c / d,
-        [`(${ a }-${ b }-${ c })/${ d }`]: (a - b - c) / d,
-
-        [`${ a }-${ b }/${ c }/${ d }`]: a - b / c / d,
-        [`(${ a }-${ b })/${ c }/${ d }`]: (a - b) / c / d,
-
-        [`${ a }-${ b }-${ c }*${ d }`]: a - b - c * d,
-        [`(${ a }-${ b }-${ c })*${ d }`]: (a - b - c) * d,
-
-        [`${ a }-${ b }*${ c }*${ d }`]: a - b * c * d,
-        [`(${ a }-${ b })*${ c }*${ d }`]: (a - b) * c * d,
-
-
-        // Division
-        [`${ a }/${ b }/${ c }/${ d }`]: a / b / c / d,
-
-        [`${ a }/${ b }/${ c }-${ d }`]: a / b / c - d,
-        [`${ a }/${ b }/(${ c }-${ d })`]: a / b / (c - d),
-
-        [`${ a }/${ b }-${ c }-${ d }`]: a / b - c - d,
-        [`${ a }/(${ b }-${ c }-${ d })`]: a / (b - c - d),
-
-        [`${ a }/${ b }/${ c }+${ d }`]: a / b / c + d,
-        [`${ a }/${ b }/(${ c }+${ d })`]: a / b / (c + d),
-
-        [`${ a }/${ b }+${ c }+${ d }`]: a / b + c + d,
-        [`${ a }/(${ b }+${ c }+${ d })`]: a / (b + c + d),
-
-        [`${ a }/${ b }/${ c }*${ d }`]: a / b / c * d,
-        [`(${ a }/${ b }/${ c })*${ d }`]: (a / b / c) * d,
-
-        [`${ a }/${ b }*${ c }*${ d }`]: a / b * c * d,
-        [`(${ a }/${ b })*${ c }*${ d }`]: (a / b) * c * d,
-
-
-        // Multiplication
-        [`${ a }*${ b }*${ c }*${ d }`]: a * b * c * d,
-
-        [`${ a }*${ b }*${ c }-${ d }`]: a * b * c - d,
-        [`${ a }*${ b }*(${ c }-${ d })`]: a * b * (c - d),
-
-        [`${ a }*${ b }-${ c }-${ d }`]: a * b - c - d,
-        [`${ a }*(${ b }-${ c }-${ d })`]: a * (b - c - d),
-
-        [`${ a }*${ b }*${ c }/${ d }`]: a * b * c / d,
-        [`${ a }*${ b }*(${ c }/${ d })`]: a * b * (c / d),
-
-        [`${ a }*${ b }/${ c }/${ d }`]: a * b / c / d,
-        [`${ a }*(${ b }/${ c }/${ d })`]: a * (b / c / d),
-
-        [`${ a }*${ b }*${ c }+${ d }`]: a * b * c + d,
-        [`${ a }*${ b }*(${ c }+${ d })`]: a * b * (c + d),
-
-        [`${ a }*${ b }+${ c }+${ d }`]: a * b + c + d,
-        [`${ a }*(${ b }+${ c }+${ d })`]: a * (b + c + d)
-      }
-    } else {
-      i--;
+    for (let i = 0; i < rest.length; i++) {
+      const next = rest[i];
+      const copy = rest.slice();
+      copy.splice(i, 1);
+      this.createPermutations(copy, [...current, next]);
     }
   }
-
-  return memo;
 }
 
-const paths = findOperationPaths();
-console.log(paths);
-console.log(Object.keys(paths).length);
+
+const permTree = new PermutationTree([1, 3, 4, 6]);
+permTree.build();
+
+
+fs.writeFileSync('./public/data.json', JSON.stringify(data, null, 2));

@@ -1,0 +1,21 @@
+{
+  "name": "thedreamers_coding_challenge",
+  "version": "1.0.0",
+  "description": "Find operations to get a number, `result`, from list of `n` numbers using `+`, `-`, `/`, `*`.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npx http-server -p 3000 -c-1",
+    "build": "nodemon index.js --ignore public/*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://BideoWego@bitbucket.org/BideoWego/thedreamers_coding_challenge.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/BideoWego/thedreamers_coding_challenge#readme",
+  "dependencies": {
+    "http-server": "^0.11.1"
+  }
+}
