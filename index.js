@@ -135,6 +135,8 @@ class ParenthesizedExpressionsList {
 // ----------------------------------------
 console.log('Building data...');
 
+const startTime = new Date().getTime();
+
 const numberPermutationsList = new PermutationsList([1, 3, 4, 6]);
 numberPermutationsList.build();
 
@@ -166,6 +168,9 @@ const results = parenthesizedExpressionsList.parenthesizedExpressions.map(e => {
 
 const answers = results.filter(r => r.result === 24);
 
+const endTime = new Date().getTime();
+const time = (endTime - startTime) / results.length;
+
 
 // ----------------------------------------
 // Output
@@ -173,9 +178,9 @@ const answers = results.filter(r => r.result === 24);
 fs.writeFileSync('./public/data.json', JSON.stringify({
   input: [1, 3, 4, 6],
   expected: 24,
+  time,
   answers,
   results
 }, null, 2));
-
 
 console.log('Done.');

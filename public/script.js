@@ -15,6 +15,8 @@ $(function() {
 
     $('#input').html(json.input.join(', '));
     $('#expected').html(json.expected);
+    $('#total').html(results.length.toLocaleString());
+    $('#time').html(json.time);
     $('#answers').html(JSON.stringify(json.answers, null, 2));
 
     const chart = new Chart(context, {
