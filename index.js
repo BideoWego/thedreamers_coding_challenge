@@ -82,7 +82,7 @@ class ExpressionsList {
 
   _createExpression(values, operators) {
     const expression = values.slice();
-    for (let i = 0, j = 1; i < operators.length; i++,j += 2) {
+    for (let i = 0, j = 1; i < operators.length; i++, j += 2) {
       const operator = operators[i];
       expression.splice(j, 0, operator);
     }
@@ -114,6 +114,14 @@ class ParenthesizedExpressionsList {
   }
 
   _parenthesizeSingle(expression) {
+    // Should divide and conquer here
+    // Something like merge sort
+    // const numOperands = a => a.length - Math.floor(a.length / 2)
+    // numOperands([1, '+', 3, '+', 4, '+', 6 ]) //=> 4
+    // If the number of operands is >= 3 you can add parentheses
+    // What if number of operands is greater than 4?
+    // How to handle uneven numbers of operands?
+    // How to tell if the expression result is effected or not by adding parentheses?
     const [i1, o1, i2, o2, i3, o3, i4] = expression;
     this.parenthesizedExpressions.push(
       [i1, o1, i2, o2, i3, o3, i4],
