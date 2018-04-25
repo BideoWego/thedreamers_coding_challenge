@@ -169,12 +169,17 @@ parenthesizedExpressionsList.build();
 const results = parenthesizedExpressionsList.parenthesizedExpressions.map(e => {
   return {
     expression: e,
-    result: Function(`"use strict"; return ${ e };`)()
+    value: Function(`"use strict"; return ${ e };`)()
   };
 });
 
 
-const answers = results.filter(r => r.result === 24);
+const answers = [];
+results.forEach((result, index) => {
+  if (result.value === 24) {
+    answers.push({ result, index });
+  }
+});
 
 const endTime = new Date().getTime();
 const time = (endTime - startTime) / results.length;
