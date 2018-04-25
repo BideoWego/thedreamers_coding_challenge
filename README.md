@@ -13,3 +13,4 @@ Find operations to get a number, `result`, from list of `n` numbers using `+`, `
 1. Run `npm start` to start up the server
 1. Open your browser to http://localhost:3000
 1. Enjoy the yummy data graphed courtesy of [Chart.js](https://www.chartjs.org/)!
+
