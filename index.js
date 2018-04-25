@@ -162,7 +162,15 @@ const results = parenthesizedExpressionsList.parenthesizedExpressions.map(e => {
 });
 
 
+const answers = results.filter(r => r.result === 24);
+
+
 // ----------------------------------------
 // Output
 // ----------------------------------------
-fs.writeFileSync('./public/data.json', JSON.stringify(results, null, 2));
+fs.writeFileSync('./public/data.json', JSON.stringify({
+  input: [1, 3, 4, 6],
+  expected: 24,
+  answers,
+  results
+}, null, 2));

@@ -14,11 +14,44 @@
 
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <!-- Chart.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
   </head>
   <body>
     <header class="page-header text-center">
       <h1>The Dreamers Coding Challenge</h1>
     </header>
+
+    <main class="container">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Field</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Input</td>
+            <td id="input"></td>
+          </tr>
+          <tr>
+            <td>Expected Output</td>
+            <td id="expected"></td>
+          </tr>
+          <tr>
+            <td>Answers</td>
+            <td><pre id="answers"></pre></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <canvas id="chart"></canvas>
+    </main>
+
+    <!-- My Script -->
+    <script src="/script.js"></script>
   </body>
 </html>
 
