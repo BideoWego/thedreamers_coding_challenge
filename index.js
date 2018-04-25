@@ -91,16 +91,6 @@ class ExpressionsList {
 }
 
 
-// 1+3+4+6
-// (1+3)+4+6
-// 1+3+(4+6)
-// 1+(3+4)+6
-// ((1+3)+4)+6
-// 1+(3+(4+6))
-// (1+(3+4))+6
-// 1+((3+4)+6)
-// (1+3)+(4+6)
-
 // ----------------------------------------
 // Parentheses
 // ----------------------------------------
@@ -117,7 +107,6 @@ class ParenthesizedExpressionsList {
   build() {
     this._parenthesizeAll();
     this.parenthesizedExpressions = this.parenthesizedExpressions.map(e => e.join(''));
-    console.log(this.parenthesizedExpressions.length);
   }
 
   _parenthesizeAll() {
@@ -165,8 +154,15 @@ const parenthesizedExpressionsList = new ParenthesizedExpressionsList(
 parenthesizedExpressionsList.build();
 
 
+const results = parenthesizedExpressionsList.parenthesizedExpressions.map(e => {
+  return {
+    expression: e,
+    result: Function(`"use strict"; return ${ e };`)()
+  };
+});
+
+
 // ----------------------------------------
 // Output
 // ----------------------------------------
-const data = [];
-fs.writeFileSync('./public/data.json', JSON.stringify(data, null, 2));
+fs.writeFileSync('./public/data.json', JSON.stringify(results, null, 2));
