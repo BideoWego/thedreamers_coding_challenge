@@ -1,38 +1,20 @@
 const fs = require('fs');
 
-const data = [];
 
-
-class Node {
-  constructor(value=null, parent=null, children=[]) {
-    this.value = value;
-    this.parent = parent;
-    this.children = children;
-    this.depth = parent ? parent.depth + 1 : 0;
-  }
-}
-
-
-class PermutationTree {
+class PermutationsList {
   constructor(values) {
     this.values = values;
-    this.root = new Node();
-    this.numPerms = 0;
     this.permutations = [];
   }
 
   build() {
     this.createPermutations(this.values);
-  }
-
-  addPermutation(nums) {
-    this.permutations.push(nums);
-    console.log(this.permutations, this.permutations.length);
+    console.log(this.permutations);
   }
 
   createPermutations(rest=[], current=[]) {
     if (current.length === this.values.length) {
-      return this.addPermutation(current);
+      return this.permutations.push(current);
     }
 
     for (let i = 0; i < rest.length; i++) {
@@ -45,8 +27,9 @@ class PermutationTree {
 }
 
 
-const permTree = new PermutationTree([1, 3, 4, 6]);
-permTree.build();
+const numberPermutationsList = new PermutationsList([1, 3, 4, 6]);
+numberPermutationsList.build();
 
 
+const data = [];
 fs.writeFileSync('./public/data.json', JSON.stringify(data, null, 2));
