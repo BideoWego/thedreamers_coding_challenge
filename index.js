@@ -1,6 +1,9 @@
 const fs = require('fs');
 
 
+// ----------------------------------------
+// Number Permutations
+// ----------------------------------------
 class PermutationsList {
   constructor(values) {
     this.values = values;
@@ -26,6 +29,9 @@ class PermutationsList {
 }
 
 
+// ----------------------------------------
+// Operator Combinations
+// ----------------------------------------
 class CombinationsList {
   constructor(values, maxLength=null) {
     this.values = values;
@@ -50,6 +56,9 @@ class CombinationsList {
 }
 
 
+// ----------------------------------------
+// Expressions
+// ----------------------------------------
 class ExpressionsList {
   constructor(permutations, combinations) {
     this.permutations = permutations;
@@ -59,7 +68,6 @@ class ExpressionsList {
 
   build() {
     this._createExpressions();
-    console.log(this.expressions.length);
   }
 
   _createExpressions() {
@@ -83,6 +91,59 @@ class ExpressionsList {
 }
 
 
+// 1+3+4+6
+// (1+3)+4+6
+// 1+3+(4+6)
+// 1+(3+4)+6
+// ((1+3)+4)+6
+// 1+(3+(4+6))
+// (1+(3+4))+6
+// 1+((3+4)+6)
+// (1+3)+(4+6)
+
+// ----------------------------------------
+// Parentheses
+// ----------------------------------------
+class ParenthesizedExpressionsList {
+  static get re() {
+    return /^[\+\-\/\*]$/;
+  }
+
+  constructor(expressions) {
+    this.expressions = expressions;
+    this.parenthesizedExpressions = [];
+  }
+
+  build() {
+    this._parenthesizeAll();
+    this.parenthesizedExpressions = this.parenthesizedExpressions.map(e => e.join(''));
+    console.log(this.parenthesizedExpressions.length);
+  }
+
+  _parenthesizeAll() {
+    this.expressions.forEach(e => this._parenthesizeSingle(e));
+  }
+
+  _parenthesizeSingle(expression) {
+    const [i1, o1, i2, o2, i3, o3, i4] = expression;
+    this.parenthesizedExpressions.push(
+      [i1, o1, i2, o2, i3, o3, i4],
+      ['(', i1, o1, i2, ')', o2, i3, o3, i4],
+      [i1, o1, i2, o2, '(', i3, o3, i4, ')'],
+      [i1, o1, '(', i2, o2, i3, ')', o3, i4],
+      ['((', i1, o1, i2, ')', o2, i3, ')', o3, i4],
+      [i1, o1, '(', i2, o2, '(', i3, o3, i4, '))'],
+      ['(', i1, o1, '(', i2, o2, i3, '))', o3, i4],
+      [i1, o1, '((', i2, o2, i3, ')', o3, i4, ')'],
+      ['(', i1, o1, i2, ')', o2, '(', i3, o3, i4, ')']
+    );
+  }
+}
+
+
+// ----------------------------------------
+// Run Script
+// ----------------------------------------
 const numberPermutationsList = new PermutationsList([1, 3, 4, 6]);
 numberPermutationsList.build();
 
@@ -98,5 +159,14 @@ const expressionsList = new ExpressionsList(
 expressionsList.build();
 
 
+const parenthesizedExpressionsList = new ParenthesizedExpressionsList(
+  expressionsList.expressions
+);
+parenthesizedExpressionsList.build();
+
+
+// ----------------------------------------
+// Output
+// ----------------------------------------
 const data = [];
 fs.writeFileSync('./public/data.json', JSON.stringify(data, null, 2));
