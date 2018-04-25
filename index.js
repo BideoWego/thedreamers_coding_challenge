@@ -34,22 +34,17 @@ class CombinationsList {
   }
 
   build() {
-    this._createCombinations(this.values);
-    this.combinations.forEach(c => console.log(c));
-    console.log(this.combinations.length);
+    this._createCombinations();
   }
 
-  _createCombinations(rest=[], current=[]) {
-    if (current.length === this.maxLength) {
+  _createCombinations(current=[]) {
+    if (current.length >= this.maxLength) {
       return this.combinations.push(current);
     }
 
-    for (let i = 0; i < rest.length; i++) {
-      const next = rest[i];
-      for (let j = 1; j <= rest.length; j++) {
-        const filled = Array(this.maxLength).fill(next, 0, 0 + j);
-        console.log(filled);
-      }
+    for (let i = 0; i < this.values.length; i++) {
+      const next = this.values[i];
+      this._createCombinations([...current, next]);
     }
   }
 }
@@ -59,7 +54,7 @@ const numberPermutationsList = new PermutationsList([1, 3, 4, 6]);
 numberPermutationsList.build();
 
 
-const operatorCombinationsList = new CombinationsList(['+', '-', '/', '*']);
+const operatorCombinationsList = new CombinationsList(['+', '-', '/', '*'], 3);
 operatorCombinationsList.build();
 
 
