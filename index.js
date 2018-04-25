@@ -133,6 +133,8 @@ class ParenthesizedExpressionsList {
 // ----------------------------------------
 // Run Script
 // ----------------------------------------
+console.log('Building data...');
+
 const numberPermutationsList = new PermutationsList([1, 3, 4, 6]);
 numberPermutationsList.build();
 
@@ -174,3 +176,6 @@ fs.writeFileSync('./public/data.json', JSON.stringify({
   answers,
   results
 }, null, 2));
+
+
+console.log('Done.');

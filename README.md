@@ -3,11 +3,13 @@
 Find operations to get a number, `result`, from list of `n` numbers using `+`, `-`, `/`, `*`.
 
 
-## Brute Force Approach
+## Getting Started
 
-Find the number of permutations of `n`. Find the number of permutations of the operators. Shuffle the list until all possibilities are counted. For each permutation, perform all permutations of the given operators. Record the results in a memo object.
-
-
-## Tree Approach
-
-Create a tree with root node value `0`. Each level of children will each have a unique value from `n`. Each level will have a value and an operator. The first level of children **must** have an operator of `+`. Each next level will account for each of the permutations of `n` combined with an operator until all combined permutations are satisfied.
+1. Clone this repo
+1. `cd` into the project directory
+1. You should have Node/NPM installed
+1. Run `npm install`
+1. Run `npm build` to build the JSON data (especially if you tweak `index.js` to change the input etc...)
+1. Run `npm start` to start up the server
+1. Open your browser to http://localhost:3000
+1. Enjoy the yummy data graphed courtesy of [Chart.js](https://www.chartjs.org/)!
