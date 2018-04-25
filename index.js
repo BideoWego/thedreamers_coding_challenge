@@ -50,12 +50,52 @@ class CombinationsList {
 }
 
 
+class ExpressionsList {
+  constructor(permutations, combinations) {
+    this.permutations = permutations;
+    this.combinations = combinations;
+    this.expressions = [];
+  }
+
+  build() {
+    this._createExpressions();
+    console.log(this.expressions.length);
+  }
+
+  _createExpressions() {
+    for (let i = 0; i < this.permutations.length; i++) {
+      const permutation = this.permutations[i];
+      for (let j = 0; j < this.combinations.length; j++) {
+        const combination = this.combinations[j];
+        this._createExpression(permutation, combination);
+      }
+    }
+  }
+
+  _createExpression(values, operators) {
+    const expression = values.slice();
+    for (let i = 0, j = 1; i < operators.length; i++,j += 2) {
+      const operator = operators[i];
+      expression.splice(j, 0, operator);
+    }
+    this.expressions.push(expression);
+  }
+}
+
+
 const numberPermutationsList = new PermutationsList([1, 3, 4, 6]);
 numberPermutationsList.build();
 
 
 const operatorCombinationsList = new CombinationsList(['+', '-', '/', '*'], 3);
 operatorCombinationsList.build();
+
+
+const expressionsList = new ExpressionsList(
+  numberPermutationsList.permutations,
+  operatorCombinationsList.combinations
+);
+expressionsList.build();
 
 
 const data = [];
