@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npx http-server -p 3000 -c-1",
-    "build": "node index.js"
+    "start": "nodemon --exec 'npx http-server -p 3000 -c-1'",
+    "build": "nodemon --ignore public/ index.js"
   },
   "repository": {
     "type": "git",
