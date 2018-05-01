@@ -5,6 +5,8 @@ Find operations to get a number, `result`, from list of `n` numbers using `+`, `
 
 ## Getting Started
 
+**NOTE** The `npm` `install` and `build` scripts require installing [npx](https://www.npmjs.com/package/npx) and [nodemon](https://github.com/remy/nodemon).
+
 1. Clone this repo
 1. `cd` into the project directory
 1. You should have Node/NPM installed
