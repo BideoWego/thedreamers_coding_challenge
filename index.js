@@ -67,75 +67,86 @@ class ExpressionsList {
   }
 
   build() {
-    this._createExpressions();
+    const expressions = this._createExpressions();
   }
 
   _createExpressions() {
     for (let i = 0; i < this.permutations.length; i++) {
       const permutation = this.permutations[i];
-      for (let j = 0; j < this.combinations.length; j++) {
-        const combination = this.combinations[j];
-        this._createExpression(permutation, combination);
+      const variations = this._createVariations(permutation);
+      const expressions = this._parenthesize(variations);
+      const merged = this._mergeOperators(expressions);
+      this.expressions.push(...merged);
+    }
+  }
+
+  _createVariations(array) {
+    const results = [];
+    for (let size = 2; size < array.length; size++) {
+      for (let  i = 0; i + size <= array.length; i++) {
+        const sliced = array.slice();
+        const chunk = sliced.slice(i, i + size);
+        sliced.splice(i, size, chunk);
+        results.push(sliced);
+
+        if (sliced.length > 2) {
+          results.push(...this._createVariations(sliced));
+        }
       }
     }
+    return results;
   }
 
-  _createExpression(values, operators) {
-    const expression = values.slice();
-    for (let i = 0, j = 1; i < operators.length; i++, j += 2) {
-      const operator = operators[i];
-      expression.splice(j, 0, operator);
+  _parenthesize(array) {
+    const results = {};
+    for (let j = 0; j < array.length; j++) {
+      const variation = array[j];
+      const stringified = this._stringify(variation);
+      results[stringified] = true;
     }
-    this.expressions.push(expression);
+    return Object.keys(results);
+  }
+
+  _stringify(variation) {
+    let str = '';
+    for (let i = 0; i < variation.length; i++) {
+      const item = variation[i];
+      str += i === 0 ? '' : ',';
+
+      if (Array.isArray(item)) {
+        str += `(${ this._stringify(item) })`;
+      } else {
+        str += item;
+      }
+    }
+    return str;
+  }
+
+  _mergeOperators(expressions) {
+    const merged = [];
+    for (let i = 0; i < this.combinations.length; i++) {
+      for (let j = 0; j < expressions.length; j++) {
+        const combination = this.combinations[i].slice();
+        const expression = expressions[j];
+
+        let str = expression
+          .split('')
+          .map(char => char === ',' ? combination.shift() : char)
+          .join('');
+        merged.push(str);
+      }
+    }
+    return merged;
   }
 }
 
 
 // ----------------------------------------
-// Parentheses
+// Config
 // ----------------------------------------
-class ParenthesizedExpressionsList {
-  static get re() {
-    return /^[\+\-\/\*]$/;
-  }
 
-  constructor(expressions) {
-    this.expressions = expressions;
-    this.parenthesizedExpressions = [];
-  }
-
-  build() {
-    this._parenthesizeAll();
-    this.parenthesizedExpressions = this.parenthesizedExpressions.map(e => e.join(''));
-  }
-
-  _parenthesizeAll() {
-    this.expressions.forEach(e => this._parenthesizeSingle(e));
-  }
-
-  _parenthesizeSingle(expression) {
-    // Should divide and conquer here
-    // Something like merge sort
-    // const numOperands = a => a.length - Math.floor(a.length / 2)
-    // numOperands([1, '+', 3, '+', 4, '+', 6 ]) //=> 4
-    // If the number of operands is >= 3 you can add parentheses
-    // What if number of operands is greater than 4?
-    // How to handle uneven numbers of operands?
-    // How to tell if the expression result is effected or not by adding parentheses?
-    const [i1, o1, i2, o2, i3, o3, i4] = expression;
-    this.parenthesizedExpressions.push(
-      [i1, o1, i2, o2, i3, o3, i4],
-      ['(', i1, o1, i2, ')', o2, i3, o3, i4],
-      [i1, o1, i2, o2, '(', i3, o3, i4, ')'],
-      [i1, o1, '(', i2, o2, i3, ')', o3, i4],
-      ['((', i1, o1, i2, ')', o2, i3, ')', o3, i4],
-      [i1, o1, '(', i2, o2, '(', i3, o3, i4, '))'],
-      ['(', i1, o1, '(', i2, o2, i3, '))', o3, i4],
-      [i1, o1, '((', i2, o2, i3, ')', o3, i4, ')'],
-      ['(', i1, o1, i2, ')', o2, '(', i3, o3, i4, ')']
-    );
-  }
-}
+const input = [1, 3, 4, 6];
+const expected = 24;
 
 
 // ----------------------------------------
@@ -145,7 +156,7 @@ console.log('Building data...');
 
 const startTime = new Date().getTime();
 
-const numberPermutationsList = new PermutationsList([1, 3, 4, 6]);
+const numberPermutationsList = new PermutationsList(input);
 numberPermutationsList.build();
 
 
@@ -160,13 +171,7 @@ const expressionsList = new ExpressionsList(
 expressionsList.build();
 
 
-const parenthesizedExpressionsList = new ParenthesizedExpressionsList(
-  expressionsList.expressions
-);
-parenthesizedExpressionsList.build();
-
-
-const results = parenthesizedExpressionsList.parenthesizedExpressions.map(e => {
+const results = expressionsList.expressions.map(e => {
   return {
     expression: e,
     value: Function(`"use strict"; return ${ e };`)()
@@ -176,7 +181,7 @@ const results = parenthesizedExpressionsList.parenthesizedExpressions.map(e => {
 
 const answers = [];
 results.forEach((result, index) => {
-  if (result.value === 24) {
+  if (result.value === expected) {
     answers.push({ result, index });
   }
 });
@@ -189,8 +194,8 @@ const time = (endTime - startTime) / results.length;
 // Output
 // ----------------------------------------
 fs.writeFileSync('./public/data.json', JSON.stringify({
-  input: [1, 3, 4, 6],
-  expected: 24,
+  input,
+  expected,
   time,
   answers,
   results
