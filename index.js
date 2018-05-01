@@ -160,7 +160,10 @@ const numberPermutationsList = new PermutationsList(input);
 numberPermutationsList.build();
 
 
-const operatorCombinationsList = new CombinationsList(['+', '-', '/', '*'], 3);
+const operatorCombinationsList = new CombinationsList(
+  ['+', '-', '/', '*'],
+  input.length - 1
+);
 operatorCombinationsList.build();
 
 
